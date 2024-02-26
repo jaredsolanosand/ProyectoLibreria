@@ -1,0 +1,56 @@
+<% let encabezado={ autores: [
+    ["Angel Jared 'Solano' Sandoval", 'Jaredsolanosandoval@gmail.com'],
+    ["Joaly Guadalupe 'Morales' Amaya", 'Joalymorales06@gmail.com']
+],
+descripcion: 'Portal principal',
+fechaCreacion: '21/02/24',
+palabrasClave: 'index,portal,libreria,node.js,express,ejs',
+jquery: true} %>
+<%- include('comunes/encabezado_html', {datos: encabezado}) %>
+<title>Detalle del libro</title>
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<style>
+    header {
+        background-color: #CEF6F5;
+        width: 100%;
+        margin: 15px 0px;
+        padding: 0px 20px;
+    }
+</style>
+</head>
+<body>
+    <header>
+        <h2>Resultados de Búsqueda</h2>
+    </header>    
+<div class="container">
+    <div class="table-responsive"> 
+        <table class="table table-striped table-bordered"> 
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Autor(es)</th>
+                    <th>Editorial</th>
+                    <th>Fecha de Publicación</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% libros.forEach(function(libro) { %>
+                    <tr>
+                        <td><%= libro.id %></td>
+                        <td><%= libro.titulo %></td>
+                        <td><%= libro.autores %></td>
+                        <td><%= libro.editorial %></td>
+                        <td><%= libro.fechaPublicacion %></td>
+                        <td><a href="/libros/detalles/<%= libro.id %>" class="btn btn-primary">Detalles</a></td> 
+                    </tr>
+                <% }); %>                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<%- include('comunes/pie_pagina') %>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<% let encabezado = {
+    autores: [
+        ["Angel Jared 'Solano' Sandoval", 'Jaredsolanosandoval@gmail.com'],
+        ["Joaly Guadalupe 'Morales' Amaya", 'Joalymorales06@gmail.com']
+    ],
+    descripcion: 'Portal principal',
+    fechaCreacion: '21/02/24',
+    palabrasClave: 'index,portal,libreria,node.js,express,ejs',
+    jquery: true
+} %>
+
+<%- include('comunes/encabezado_html', { datos: encabezado }) %>
+
+<title>Detalle del libro</title>
+</head>
+
+<body class="bg-light text-dark text-center">
+    <div class="container">
+        <h1 class="my-4">Detalles del Libro</h1>
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="card-text"><strong>ID:</strong> <%= libro.id %></p>
+                <p class="card-text"><strong>Título:</strong> <%= libro.titulo %></p>
+                <p class="card-text"><strong>Autor(es):</strong> <%= libro.autores %></p>
+                <p class="card-text"><strong>Editorial:</strong> <%= libro.editorial %></p>
+                <p class="card-text"><strong>Fecha de Publicación:</strong> <%= libro.fechaPublicacion %></p>
+                <div class="btn-group" role="group" aria-label="Acciones">
+                    <form id="eliminar_libro_form" action="/libros/<%= libro.id %>" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button id="eliminar_libro_btn" type="button" class="btn btn-danger">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <a href="/libros/<%= libro.id %>/editar" class="btn btn-warning">Modificar</a>
+        <a href="/" class="btn btn-primary">Registrar otro libro</a>
+    </div>
+
+    <%- include('comunes/pie_pagina') %>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#eliminar_libro_btn').click(function(eventoClick) {
+                if (!confirm('¿Borrar? Esta acción no puede deshacerse')) return;
+                let botonBorrar = $(this);
+                botonBorrar.prop('disabled', true);
+                botonBorrar.removeClass('btn-danger');
+                botonBorrar.addClass('btn-secondary');
+                $.ajax({
+                    type: 'DELETE',
+                    url: "/libros/<%= libro.id %>",
+                    success: function(respuesta) {
+                        alert(`El libro "${respuesta}" ha sido eliminado.`);
+                        window.location.href = '/'; 
+                    },
+                    error: function(ajax, mensaje) {
+                        alert('Ocurrió un problema al borrar el libro.');
+                        botonBorrar.removeClass('btn-secondary');
+                        botonBorrar.addClass('btn-danger');
+                        botonBorrar.prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>    
+</body>
+</html>

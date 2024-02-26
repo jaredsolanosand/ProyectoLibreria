@@ -1,0 +1,70 @@
+<% let encabezado = {
+    autores: [
+        ["Angel Jared 'Solano' Sandoval", 'Jaredsolanosandoval@gmail.com'],
+        ["Joaly Guadalupe 'Morales' Amaya", 'Joalymorales06@gmail.com']
+    ],
+    descripcion: 'Portal principal',
+    fechaCreacion: '21/02/24',
+    palabrasClave: 'index,portal,libreria,node.js,express,ejs',
+    jquery: true
+} %>
+
+<%- include('comunes/encabezado_html', { datos: encabezado }) %>
+
+<title>Modificar Libro</title>
+</head>
+<body class="bg-light text-dark">
+    <div class="container">
+        <header class="bg-info p-4 mb-4">
+            <h2 class="text-center text-black">Modificar Libro</h2>
+        </header>
+        <form id="editar_libro_form" method="POST">
+            <input type="hidden" id="id" name="id" value="<%= id %>">
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="titulo" name="titulo" value="<%= libro.titulo %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="autores" class="form-label">Autor(es)</label>
+                <input type="text" class="form-control" id="autores" name="autores" value="<%= libro.autores %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="editorial" class="form-label">Editorial</label>
+                <input type="text" class="form-control" id="editorial" name="editorial" value="<%= libro.editorial %>" required>
+            </div>
+            <div class="mb-3">
+                <label for="fechaPublicacion" class="form-label">Fecha de Publicación</label>
+                <input type="date" class="form-control" id="fechaPublicacion" name="fechaPublicacion" value="<%= libro.fechaPublicacion %>" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </div>
+    <%- include('comunes/pie_pagina') %>
+    <script>
+        $('#editar_libro_form').submit(function (eventoEnviar) {
+            eventoEnviar.preventDefault();
+            let idLibro = $('#id').val();
+            let tituloLibro = $('#titulo').val();
+            let autorLibro = $('#autores').val();
+            let editorialLibro = $('#editorial').val();
+            let fechaPublicacionLibro = $('#fechaPublicacion').val();
+            $.ajax({
+                type: 'PUT',
+                url: `/libros/${idLibro}/${encodeURIComponent(tituloLibro)}/${encodeURIComponent(autorLibro)}/${encodeURIComponent(editorialLibro)}/${fechaPublicacionLibro}`,
+                success: function (respuesta) {
+                    $('#titulo').val('');
+                    $('#autores').val('');
+                    $('#editorial').val('');
+                    $('#fechaPublicacion').val('');
+                    alert('Libro actualizado exitosamente');
+                    window.location.href = '/';
+                },
+                error: function (xhr, status, error) {
+                    alert('Ocurrió un problema al actualizar el libro.');
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>
