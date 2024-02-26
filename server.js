@@ -1,16 +1,22 @@
-const express = require('express')
-const middleware = require('./middleware/errores.js')
-const rutasWeb = require('./rutas/web.js')
-const rutasWs = require('./rutas/socket.js')
-const app = express()
-const bodyParser = require('body-parser');
+const express = require('express');
+const ejs = require('ejs');
 
-app.use(bodyParser.json());
+const middleware = require('./middleware/errores.js');
+const rutasWeb = require('./rutas/web.js');
+const rutasWs = require('./rutas/socket.js');
 
-app.use('/', rutasWeb)
-rutasWs(app)
-middleware(app)
+const app = express();
+app.set('view engine', 'ejs');
+app.set('views', './vistas');
+app.use(express.static(__dirname + '/public'));
 
-app.listen(9000, () => {
-    console.log('Iniciada app en el puerto 9000')
-})
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use('/', rutasWeb);
+rutasWs(app);
+middleware(app);
+
+app.listen(8000, () => {
+    console.log('Aplicación iniciada en el puerto 8000');
+});
